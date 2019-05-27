@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Pathfinder" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=pfjoe.database.windows.net;Initial Catalog=Pathfinder;User ID=pfjoe;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False" SettingsObjectName="PFTestV5.Properties.Settings" SettingsPropertyName="PathfinderConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.BASE_CLASS" Member="BASE_CLASSes">
+    <Type Name="BASE_CLASS">
+      <Column Name="CLASS_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CLASS_NAME" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CLASS_HITDIE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CLASS_BAB_PROGRESSION" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="CLASS_FORT_PROGRESSION" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="CLASS_REF_PROGRESSION" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="CLASS_WILL_PROGRESSION" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="CLASS_SKILL_RANK_MOD" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RACE" Member="RACEs">
+    <Type Name="RACE">
+      <Column Name="RACE_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RACE_NAME" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_STR" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_DEX" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_CON" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_INT" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_WIS" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_CHA" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_SIZE_MOD" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_TYPE" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_SUBTYPE" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="RACE_SPEED" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WEAPON" Member="WEAPONs">
+    <Type Name="WEAPON">
+      <Column Name="WEAPON_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WEAPON_NAME" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_DAMAGE_DIE_COUNT" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_DAMAGE_DIE_SIZE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_CRIT_RANGE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_CRIT_MODIFIER" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_DAMAGE_TYPE" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_CATAGORY" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_PROFICIENCY_TYPE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_GROUP_KEY" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_COST" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_WEIGHT" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WEAPON_REACH_FLAG" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>
