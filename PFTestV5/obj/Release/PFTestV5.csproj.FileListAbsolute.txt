@@ -1,0 +1,9 @@
+C:\Users\Joseph\source\repos\PFTestV5\PFTestV5\bin\Release\PFTestV5.exe.config
+C:\Users\Joseph\source\repos\PFTestV5\PFTestV5\bin\Release\PFTestV5.exe
+C:\Users\Joseph\source\repos\PFTestV5\PFTestV5\bin\Release\PFTestV5.pdb
+C:\Users\Joseph\source\repos\PFTestV5\PFTestV5\bin\Release\System.Data.SqlClient.dll
+C:\Users\Joseph\source\repos\PFTestV5\PFTestV5\obj\Release\PFTestV5.csprojAssemblyReference.cache
+C:\Users\Joseph\source\repos\PFTestV5\PFTestV5\obj\Release\PFTestV5.csproj.CoreCompileInputs.cache
+C:\Users\Joseph\source\repos\PFTestV5\PFTestV5\obj\Release\PFTestV5.csproj.CopyComplete
+C:\Users\Joseph\source\repos\PFTestV5\PFTestV5\obj\Release\PFTestV5.exe
+C:\Users\Joseph\source\repos\PFTestV5\PFTestV5\obj\Release\PFTestV5.pdb

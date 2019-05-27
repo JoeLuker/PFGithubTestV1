@@ -10,26 +10,8 @@ namespace PFTestV5
     {
         static void Main()
         {
-            Character npc = new Character();
 
-            Character jeff = new Character("jeff");
-
-            Character.PrintStats(jeff);
-
-            jeff.SetCharAbilityScores(31, 10, 23, 16, 17, 16);
-
-            jeff.SetCharRace(1);
-
-            jeff.AddClassLevel(3, 5);
-
-            jeff.EquipWeapon(1, 2, 0);
-
-            Character.PrintStats(jeff);
-
-            Console.WriteLine();
-
-
-            Console.ReadLine();
+            Test2();
 
         }
 
@@ -44,9 +26,14 @@ namespace PFTestV5
 
         }
 
+        public class Battle
+        {
+
+        }
+
         public class Character
         {
-            public string Name { get; private set; }
+            public string CharName { get; private set; }
 
             public int HitDieCnt { get; private set; }
             public int Level { get; private set; }
@@ -94,27 +81,38 @@ namespace PFTestV5
             public string EquippedWeaponName { get; private set; }
 
             public int WeaponBonus { get; private set; }
+            public int CharDamageDiceCnt { get; private set; }
+            public int CharDamageDiceSize { get; private set; }
+            public int CharCritRange { get; private set; }
+            public int CharCritMod { get; private set; }
 
             public int Speed { get; private set; }
 
-            struct LoocationCoord
-            {
-                int x, y, z;
-            }
+            // Locations
+            public int CoordX { get; private set; }
+            public int CoordY { get; private set; }
+            public int CoordZ { get; private set; }
 
             public Character()
             {
-                Name = "Neil";
+                CharName = "Neil";
 
                 CharClassName = new List<string>();
+
+                CoordX = 0;
+                CoordY = 0;
+                CoordZ = 0;
             }
 
             public Character(string name)
             {
-                Name = name;
+                CharName = name;
 
                 CharClassName = new List<string>();
 
+                CoordX = 0;
+                CoordY = 0;
+                CoordZ = 0;
             }
 
 
@@ -207,7 +205,7 @@ namespace PFTestV5
             // Set this Second
             public class Race
             {
-                public String RaceName { get; private set; }
+                public string RaceName { get; private set; }
 
                 public int RaceStr { get; private set; }
                 public int RaceDex { get; private set; }
@@ -225,8 +223,8 @@ namespace PFTestV5
 
                 public Race(int raceID)
                 {
-                    var pfdb = new DataClasses1DataContext();
-                    var cRaces = pfdb.RACEs;
+                    DataClasses1DataContext pfdb = new DataClasses1DataContext();
+                    System.Data.Linq.Table<RACE> cRaces = pfdb.RACEs;
 
 
                     IEnumerable<RACE> raceQuery =
@@ -286,11 +284,11 @@ namespace PFTestV5
 
                 public int HitDieSize { get; private set; }
 
-                private decimal BABProgression;
+                private readonly decimal BABProgression;
 
-                private decimal FortSaveProgression;
-                private decimal RefSaveProgression;
-                private decimal WillSaveProgression;
+                private readonly decimal FortSaveProgression;
+                private readonly decimal RefSaveProgression;
+                private readonly decimal WillSaveProgression;
 
                 public int BAB { get; private set; }
 
@@ -304,8 +302,8 @@ namespace PFTestV5
                 public BaseClass(int classID, int hitDieCnt)
                 {
 
-                    var pfdb = new DataClasses1DataContext();
-                    var bclasses = pfdb.BASE_CLASSes;
+                    DataClasses1DataContext pfdb = new DataClasses1DataContext();
+                    System.Data.Linq.Table<BASE_CLASS> bclasses = pfdb.BASE_CLASSes;
 
 
                     IEnumerable<BASE_CLASS> classQuery =
@@ -409,6 +407,7 @@ namespace PFTestV5
 
             }
 
+
             public void EquipWeapon(int charWeaponId, int hands, int weaponBonus)
             {
                 Weapon Greatsword = new Weapon(charWeaponId);
@@ -419,10 +418,113 @@ namespace PFTestV5
 
                 WeaponHands = hands;
 
+                CharCritRange = Greatsword.CritRange;
+
+                CharCritMod = Greatsword.CritMod;
+
+                CharDamageDiceCnt = Greatsword.DamageDieCnt;
+
+                CharDamageDiceSize = Greatsword.DamageDieSize;
+
                 UpdateOffenseStats();
 
             }
 
+
+            public void MoveTo(int x, int y, int z)
+            {
+                CoordX = x;
+                CoordY = y;
+                CoordZ = z;
+            }
+
+
+
+            public void AttackAction(Character victim)
+            {
+                int attackRoll = Dice.Roll(20);
+                int attack = attackRoll + AttackMod;
+
+                int confirmationRoll = Dice.Roll(20);
+                int confirmation = confirmationRoll + AttackMod;
+
+                int damageRoll = DamageRoll();
+                if (attackRoll == 1)
+                {
+                    Console.WriteLine("Critical Miss!");
+                }
+                else if ((attack >= victim.ArmorClass) || (attackRoll == 20))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Sucessfull Hit!");
+                    Console.WriteLine();
+
+                    if (attackRoll >= CharCritRange)
+                    {
+                        Console.WriteLine("Critical Threat...");
+                        Console.WriteLine();
+
+                        if ((confirmationRoll == 20) || (confirmation >= victim.ArmorClass))
+                        {
+                            Console.WriteLine("CRITICAL HIT!");
+
+                            for (int i = 0; i < (CharCritMod - 1); i++)
+                            {
+                                damageRoll += DamageRoll();
+                            }
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("Failed to confirm.");
+                            Console.WriteLine();
+                        }
+                    }
+                    Console.WriteLine(CharName + " dealt " + damageRoll + " points of damage to " + victim.CharName + "!");
+                    Console.WriteLine();
+
+                    victim.CurrentHealth -= damageRoll;
+
+                }
+                else
+                {
+                    Console.WriteLine(CharName + " missed " + victim.CharName + " with a " + attack);
+                }
+
+            }
+
+            private int DamageRoll()
+            {
+                int damage = DamageMod + DamageDiceRoll();
+                
+                return damage;
+            }
+
+            private int DamageDiceRoll()
+            {
+                int rollTotal = 0;
+
+                for (int i = 0; i < (CharDamageDiceCnt - 1); i++)
+                {
+                    rollTotal += Dice.Roll(CharDamageDiceSize);
+                }
+
+                return rollTotal;
+            }
+
+            //Sets stats to that of a Porter's and equips them with a +5 Greatsword;
+            public void CreatePorter()
+            {
+                SetCharAbilityScores(15, 9, 12, 10, 8, 11);
+
+                SetCharRace(1);
+
+                AddClassLevel(1, 1);
+
+                EquipWeapon(1, 2, 5);
+
+                MoveTo(5, 0, 0);
+            }
 
         }
 
@@ -439,7 +541,9 @@ namespace PFTestV5
             public class Weapon
             {
 
-                public string WeaponName { get; private set;
+                public string WeaponName
+                {
+                    get; private set;
                 }
                 public int DamageDieCnt { get; private set; }
                 public int DamageDieSize { get; private set; }
@@ -450,8 +554,8 @@ namespace PFTestV5
 
                 public Weapon(int weaponId)
                 {
-                    var pfdb = new DataClasses1DataContext();
-                    var weapons = pfdb.WEAPONs;
+                    DataClasses1DataContext pfdb = new DataClasses1DataContext();
+                    System.Data.Linq.Table<WEAPON> weapons = pfdb.WEAPONs;
 
                     IEnumerable<WEAPON> weaponQuery =
                         from WEAPON in weapons
@@ -471,6 +575,66 @@ namespace PFTestV5
             }
 
         }
+
+
+        public static void Test1()
+        {
+            Character jeff = new Character("jeff");
+
+            Character.PrintStats(jeff);
+
+            jeff.SetCharAbilityScores(31, 10, 23, 16, 17, 16);
+
+            jeff.SetCharRace(1);
+
+            jeff.AddClassLevel(3, 5);
+
+            jeff.EquipWeapon(1, 2, 0);
+
+            jeff.MoveTo(30, 0, 0);
+
+            Character.PrintStats(jeff);
+
+            Console.WriteLine();
+
+            Console.ReadLine();
+        }
+
+        public static void Test2()
+        {
+
+            Character npc = new Character("Porter");
+
+
+            npc.CreatePorter();
+
+            Character jeff = new Character("Jeff");
+
+                jeff.SetCharAbilityScores(31, 10, 23, 16, 17, 16);
+                
+                jeff.SetCharRace(3);
+                
+                jeff.AddClassLevel(3, 5);
+                
+                jeff.EquipWeapon(1, 2, 0);
+                
+                jeff.MoveTo(0, 0, 0);
+
+
+            while (npc.CurrentHealth >= 0)
+            {
+                Console.WriteLine(npc.CurrentHealth);
+
+                jeff.AttackAction(npc);
+            }
+
+            Console.WriteLine(npc.CurrentHealth);
+
+
+            Console.ReadLine();
+        }
+
+
     }
 
 
