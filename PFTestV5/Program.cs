@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace PFTestV5
     {
         static void Main()
         {
-
+            
             Test2();
 
         }
@@ -26,8 +26,61 @@ namespace PFTestV5
 
         }
 
+
+        //Battle is really messy, I just did it as a hack job.
+
+            // The next things I want to implement are initiative and movement;
+
         public class Battle
         {
+
+            public Character Winner { get; private set; }
+            public Character Tatakai(Character combatant1, Character combatant2)
+            {
+
+                Console.WriteLine(combatant1.CharName + " and " + combatant2.CharName + " are going to fight!");
+
+
+                Console.WriteLine(combatant1.CharName + "'s Health is " + combatant1.CurrentHealth);
+
+                Console.WriteLine(combatant2.CharName + "'s Health is " + combatant2.CurrentHealth);
+
+
+                while ((combatant1.CurrentHealth >= 0) & (combatant2.CurrentHealth >= 0))
+                {
+                    if (combatant1.CurrentHealth >= 0)
+                    {
+                        combatant1.AttackAction(combatant2);
+                    }
+                    else
+                    {
+                        Console.WriteLine(combatant2.CharName + " wins!");
+                        Winner = combatant2;
+
+                        return Winner;
+                    }
+
+                    if (combatant2.CurrentHealth >= 0)
+                    {
+                        combatant2.AttackAction(combatant1);
+                    }
+                    else
+                    {
+                        Console.WriteLine(combatant1.CharName + " wins!");
+                        Winner = combatant1;
+                        return Winner;
+                    }
+
+
+                    Console.WriteLine(combatant1.CharName + "'s Health is " + combatant1.CurrentHealth);
+
+
+                    Console.WriteLine(combatant2.CharName + "'s Health is " + combatant2.CurrentHealth);
+                }
+
+                return Winner;
+            }
+
 
         }
 
@@ -526,6 +579,19 @@ namespace PFTestV5
                 MoveTo(5, 0, 0);
             }
 
+            public void CreateBerx()
+            {
+                SetCharAbilityScores(22, 14, 16, 7, 12, 14);
+
+                SetCharRace(4);
+
+                AddClassLevel(5, 8);
+
+                EquipWeapon(4, 2, 1);
+
+                MoveTo(10, 5, 0);
+            }
+
         }
 
         public class Item
@@ -603,6 +669,7 @@ namespace PFTestV5
         public static void Test2()
         {
 
+
             Character npc = new Character("Porter");
 
 
@@ -614,22 +681,51 @@ namespace PFTestV5
                 
                 jeff.SetCharRace(3);
                 
-                jeff.AddClassLevel(3, 5);
+                jeff.AddClassLevel(3, 20);
                 
                 jeff.EquipWeapon(1, 2, 0);
                 
                 jeff.MoveTo(0, 0, 0);
 
+            Character berx = new Character("BERXERXES");
 
-            while (npc.CurrentHealth >= 0)
+            berx.CreateBerx();
+
+            Battle skirmish = new Battle();
+
+            skirmish.Tatakai(jeff, npc);
+
+
+            int i = 0;
+
+            int j = 0;
+
+            int k = 1000;
+
+            while (j <= k)
             {
-                Console.WriteLine(npc.CurrentHealth);
+                while (berx != skirmish.Winner)
+                {
+                    skirmish.Tatakai(berx, jeff);
 
-                jeff.AttackAction(npc);
+                    berx.CurrentHealth = berx.MaxHealth;
+
+                    jeff.CurrentHealth = jeff.MaxHealth;
+
+                    Console.WriteLine();
+
+
+                    i++;
+
+                    Console.WriteLine(i);
+                }
+
+                j++;
             }
 
-            Console.WriteLine(npc.CurrentHealth);
+            Console.WriteLine();
 
+            Console.WriteLine("Berx can beat Jeff the level 20 Orc roughly once out of " + (i / k) + " tries, even when he goes first."); 
 
             Console.ReadLine();
         }
